@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: stablecog-mixpanel-service
+  name: sc-mixpanel-service
   namespace: stablecog
 spec:
   selector:
-    app: stablecog-mixpanel
+    app: sc-mixpanel
   type: ClusterIP
   ports:
     - port: 80
