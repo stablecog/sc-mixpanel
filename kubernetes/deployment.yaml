@@ -1,22 +1,22 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: sc-mixpanel-deployment
+  name: stablecog-mixpanel-deployment
   namespace: stablecog
   labels:
-    app: sc-mixpanel
+    app: stablecog-mixpanel
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sc-mixpanel
+      app: stablecog-mixpanel
   template:
     metadata:
       labels:
-        app: sc-mixpanel
+        app: stablecog-mixpanel
     spec:
       containers:
-        - name: sc-mixpanel
+        - name: stablecog-mixpanel
           image: replaceme
           resources:
             requests:

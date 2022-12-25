@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sc-mixpanel-ingress
+  name: stablecog-mixpanel-ingress
   namespace: stablecog
   annotations:
     kubernetes.io/ingress.class: "nginx"
@@ -16,7 +16,7 @@ spec:
   tls:
     - hosts:
         - mp.stablecog.com
-      secretName: sc-mixpanel-server-secret
+      secretName: stablecog-mixpanel-server-secret
   rules:
     - host: mp.stablecog.com
       http:
@@ -25,6 +25,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: sc-mixpanel-service
+                name: stablecog-mixpanel-service
                 port:
                   number: 80

@@ -36,7 +36,7 @@ jobs:
         with:
           platforms: linux/amd64
           push: true
-          tags: appditto/sc-mixpanel:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          tags: appditto/stablecog-mixpanel:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
 
   deploy_image:
     name: Deploy Image
@@ -62,11 +62,11 @@ jobs:
       - name: Set image
         working-directory: ./kubernetes
         run: |
-          kustomize edit set image replaceme=appditto/sc-mixpanel:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
-          kustomize build . > sc-mixpanel-k.yaml
+          kustomize edit set image replaceme=appditto/stablecog-mixpanel:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kustomize build . > stablecog-mixpanel-k.yaml
       - name: Deploy image to k8s cluster
         uses: bbedward/kubectl@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f ./kubernetes/sc-mixpanel-k.yaml
+          args: apply -f ./kubernetes/stablecog-mixpanel-k.yaml
