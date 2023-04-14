@@ -45,28 +45,13 @@ jobs:
     env:
       GITHUB_RUN_ID: ${{ github.run_id }}
     steps:
-      - uses: actions/checkout@master
-      - uses: imranismail/setup-kustomize@v1
-        with:
-          kustomize-version: "3.5.4"
-      - name: Get branch name (merge)
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+      - uses: actions/checkout@v3
 
-      - name: Get branch name (pull request)
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
-
-      - name: Set image
-        working-directory: ./kubernetes
-        run: |
-          kustomize edit set image replaceme=appditto/stablecog-mixpanel:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
-          kustomize build . > stablecog-mixpanel-k.yaml
-      - name: Deploy image to k8s cluster
-        uses: bbedward/kubectl@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      - name: Deploy
+        uses: ./.github/actions/k8s-deploy
         with:
-          args: apply -f ./kubernetes/stablecog-mixpanel-k.yaml
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          image: appditto/stablecog-mixpanel:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kube_config: ${{ secrets.KUBE_CONFIG_DATA }}
+
